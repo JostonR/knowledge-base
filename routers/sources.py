@@ -5,7 +5,10 @@ from schemas.source import SourceCreate, SourceOut
 import psycopg2.extras
 from repositories.source_repo import list_sources, get_source, create_source
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/source",
+    tags=["source"]
+)
 
 @router.get("", response_model=List[SourceOut])
 def get_sources():
