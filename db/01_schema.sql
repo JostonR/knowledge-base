@@ -1,39 +1,50 @@
 -- 1) TYPES OF SOURCES (book, bible, catechism, movie, podcast, homily, etc.)
-CREATE TABLE source_types (
+CREATE TABLE source_type (
     id          SERIAL PRIMARY KEY,
     source_type_name        VARCHAR(50) NOT NULL UNIQUE,  -- e.g. 'book', 'bible', 'catechism', 'homily'
     source_description TEXT
 );
 
 -- 2) CREATORS (authors, preachers, directors, artists, etc.)
-CREATE TABLE creators (
+CREATE TABLE creator (
     id          SERIAL PRIMARY KEY,
     full_name   VARCHAR(255) NOT NULL,
     title       TEXT,
     notes       TEXT
 );
 
+CREATE TABLE series (
+    id      SERIAL PRIMARY KEY,
+    series_name VARCHAR(255),
+    creator_id INT REFERENCES creator(id) ON DELETE CASCADE,
+    source_type_id INT REFERENCES source_type(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_series_name on series(series_name);
+CREATE INDEX idx_series_creator on series(creator_id);
+
 -- 3) SOURCES (books, movies, songs, homilies, catechism, bible, etc.)
-CREATE TABLE sources (
+CREATE TABLE source (
     id              SERIAL PRIMARY KEY,
     source_name     VARCHAR(255) NOT NULL,
-    source_type_id  INT NOT NULL REFERENCES source_types(id),
-    creator_id      INT REFERENCES creators(id), -- main creator/speaker/author (optional)
-    secondary_creator_id    INT REFERENCES creators(id),
+    source_type_id  INT NOT NULL REFERENCES source_type(id),
+    series          INT REFERENCES series(id),
+    creator_id      INT REFERENCES creator(id), -- main creator/speaker/author (optional)
+    secondary_creator_id    INT REFERENCES creator(id),
     source_description     TEXT,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Helpful indexes
-CREATE INDEX idx_sources_source_type_id ON sources(source_type_id);
-CREATE INDEX idx_sources_creator_id     ON sources(creator_id);
+CREATE INDEX idx_source_source_type_id ON source(source_type_id);
+CREATE INDEX idx_source_creator_id     ON source(creator_id);
+CREATE INDEX idx_second_source_creator_id     ON source(secondary_creator_id);
 
 -- 4) INSIGHTS (your actual notes/reflections/homily seeds)
-CREATE TABLE insights (
+CREATE TABLE insight (
     id               SERIAL PRIMARY KEY,
-    source_id        INT NOT NULL REFERENCES sources(id) ON DELETE CASCADE,
-    insight_creator_id   INT REFERENCES creators(id),
+    source_id        INT NOT NULL REFERENCES source(id) ON DELETE CASCADE,
+    insight_creator_id   INT REFERENCES creator(id),
     insight_content  TEXT NOT NULL,    -- your insight text
     quote_text       TEXT,          -- the passage from the book
     insight_type     VARCHAR(50),      -- 'quote', 'reflection', 'summary', 'homily_seed', etc.
@@ -41,10 +52,10 @@ CREATE TABLE insights (
     updated_at       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_insights_source_id ON insights(source_id);
+CREATE INDEX idx_insight_source_id ON insight(source_id);
 
 -- 5) BIBLE BOOKS (lookup for canonical book names)
-CREATE TABLE bible_books (
+CREATE TABLE bible_book (
     id              SERIAL PRIMARY KEY,
     bible_book_name            VARCHAR(50) NOT NULL UNIQUE,  -- 'Genesis', 'Exodus', 'Matthew', 'Romans'
     abbreviation    VARCHAR(16),                 -- 'Gen', 'Ex', 'Mt', 'Rom'
@@ -54,10 +65,10 @@ CREATE TABLE bible_books (
 );
 
 -- 6) SCRIPTURE REFERENCES (structured Bible ranges per insight)
-CREATE TABLE scripture_references (
+CREATE TABLE scripture_reference (
     id             SERIAL PRIMARY KEY,
-    insight_id     INT NOT NULL REFERENCES insights(id) ON DELETE CASCADE,
-    bible_book_id  INT NOT NULL REFERENCES bible_books(id),
+    insight_id     INT NOT NULL REFERENCES insight(id) ON DELETE CASCADE,
+    bible_book_id  INT NOT NULL REFERENCES bible_book(id),
     chapter_start  INT,
     verse_start    INT,
     chapter_end    INT,
@@ -65,20 +76,20 @@ CREATE TABLE scripture_references (
     note           TEXT             -- optional: 'main passage', 'cross-reference', etc.
 );
 
-CREATE INDEX idx_scripture_refs_book_chapter
-    ON scripture_references (bible_book_id, chapter_start);
+CREATE INDEX idx_scripture_ref_book_chapter
+    ON scripture_reference (bible_book_id, chapter_start);
 
 -- 7) BOOK REFERENCES (page/chapter info for sources that are books)
 -- Since books live in `sources`, we just point back to source_id.
-CREATE TABLE book_references (
+CREATE TABLE book_reference (
     id             SERIAL PRIMARY KEY,
-    insight_id     INT NOT NULL REFERENCES insights(id) ON DELETE CASCADE,
-    source_id      INT NOT NULL REFERENCES sources(id) ON DELETE CASCADE,
+    insight_id     INT NOT NULL REFERENCES insight(id) ON DELETE CASCADE,
+    source_id      INT NOT NULL REFERENCES source(id) ON DELETE CASCADE,
     page_start     INT,
     page_end       INT,
     chapter_start  INT,   --
     chapter_end    INT    --
 );
 
-CREATE INDEX idx_book_refs_source_id  ON book_references(source_id);
-CREATE INDEX idx_book_refs_insight_id ON book_references(insight_id);
+CREATE INDEX idx_book_ref_source_id  ON book_reference(source_id);
+CREATE INDEX idx_book_ref_insight_id ON book_reference(insight_id);

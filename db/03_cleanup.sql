@@ -1,1 +1,1 @@
-DROP TABLE source_types, creators, sources, insights, bible_books, scripture_references, book_references
+DROP TABLE source_type, creator, series, source, insight, bible_book, scripture_reference, book_reference
