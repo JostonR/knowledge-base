@@ -1,0 +1,1 @@
+DROP TABLE source_types, creators, sources, insights, bible_books, scripture_references, book_references
