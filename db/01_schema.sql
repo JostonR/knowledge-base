@@ -83,13 +83,23 @@ CREATE INDEX idx_scripture_ref_book_chapter
 -- Since books live in `sources`, we just point back to source_id.
 CREATE TABLE book_reference (
     id             SERIAL PRIMARY KEY,
-    insight_id     INT NOT NULL REFERENCES insight(id) ON DELETE CASCADE,
     source_id      INT NOT NULL REFERENCES source(id) ON DELETE CASCADE,
-    page_start     INT,
+    page_start     INT NOT NULL,
     page_end       INT,
     chapter_start  INT,   --
-    chapter_end    INT    --
+    chapter_end    INT,    --
+    UNIQUE(id, source_id)
 );
 
 CREATE INDEX idx_book_ref_source_id  ON book_reference(source_id);
-CREATE INDEX idx_book_ref_insight_id ON book_reference(insight_id);
+
+CREATE TABLE quote (
+    id              SERIAL PRIMARY KEY,
+    quote_text      TEXT NOT NULL,
+    source_id       INT NOT NULL REFERENCES source(id) ON DELETE CASCADE,
+    book_ref_id     INT,
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_quote_bookref_same_source
+        FOREIGN KEY (book_ref_id, source_id)
+        REFERENCES book_reference(id, source_id)
+);

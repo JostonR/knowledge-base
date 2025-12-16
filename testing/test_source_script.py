@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:8000/source"
+url = "http://localhost:8000/api/source"
 
 #Testing Insert into sources (POST)
 payload = {
@@ -41,7 +41,7 @@ print("Response:", res.json())
 
 #Testing Get a specific source
 source_id = 2
-url = f"http://localhost:8000/source/{source_id}"
+url = f"http://localhost:8000/api/source/{source_id}"
 res = requests.get(url)
 print("Status:", res.status_code)
 print("Response:", res.json())
