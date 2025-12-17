@@ -49,7 +49,7 @@ INSIGHT_GET_BY_ID = (
 )
 
 INSIGHT_CREATE = """
-INSERT INTO source(
+INSERT INTO insight(
     source_id,
     insight_creator_id,
     insight_content
@@ -57,6 +57,7 @@ INSERT INTO source(
 VALUES (%s, %s, %s)
 RETURNING
     id,
+    source_id,
     insight_creator_id,
     insight_content,
     created_at,
@@ -81,5 +82,5 @@ def create_insight(payload):
         payload.insight_creator_id,
         payload.insight_content,
     )
-    return fetch_one(create_insight, params)
+    return fetch_one(INSIGHT_CREATE, params)
     
