@@ -1,7 +1,7 @@
 from db_conn.pool import fetch_all, fetch_one
 
 INSIGHT_SELECT_BASE = """
-SELECT i.id AS insight_id, i.insight_content, i.created_at, i.updated_at,
+SELECT i.id, i.insight_content, i.created_at, i.updated_at,
 
 ic.id AS insight_creator_id,
 ic.full_name AS insight_creator_name,

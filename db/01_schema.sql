@@ -15,7 +15,7 @@ CREATE TABLE creator (
 
 CREATE TABLE series (
     id      SERIAL PRIMARY KEY,
-    series_name VARCHAR(255),
+    series_name VARCHAR(255) UNIQUE,
     creator_id INT REFERENCES creator(id) ON DELETE CASCADE,
     source_type_id INT REFERENCES source_type(id) ON DELETE CASCADE
 );
@@ -27,7 +27,7 @@ CREATE TABLE source (
     id              SERIAL PRIMARY KEY,
     source_name     VARCHAR(255) NOT NULL,
     source_type_id  INT NOT NULL REFERENCES source_type(id),
-    series          INT REFERENCES series(id),
+    series_id          INT REFERENCES series(id),
     creator_id      INT REFERENCES creator(id), -- main creator/speaker/author (optional)
     secondary_creator_id    INT REFERENCES creator(id),
     source_description     TEXT,
@@ -37,11 +37,8 @@ CREATE TABLE source (
 
 CREATE INDEX idx_source_creator_id ON source(creator_id);
 CREATE INDEX idx_source_type_id ON source(source_type_id); 
-
--- Helpful indexes
-CREATE INDEX idx_source_source_type_id ON source(source_type_id);
-CREATE INDEX idx_source_creator_id     ON source(creator_id);
 CREATE INDEX idx_second_source_creator_id     ON source(secondary_creator_id);
+-- Helpful indexes
 
 -- 4) INSIGHTS (your actual notes/reflections/homily seeds)
 CREATE TABLE insight (

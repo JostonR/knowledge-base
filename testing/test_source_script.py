@@ -6,7 +6,7 @@ url = "http://localhost:8000/api/source"
 payload = {
     "source_name": "Bible in a Year: Day 8 God's Covenant with Abram",
     "source_type_id": 4,
-    "series": 1,
+    "series_id": 1,
     "creator_id": 1,
     "secondary_creator_id": 2,
     "source_description": "Episode 7 covering Genesis 12 and Job 1"
@@ -21,7 +21,7 @@ print("Raw response text:\n", res.text)
 payload = {
     "source_name": "Bible in a Year: Day 12 The Sacrifice of Isaac",
     "source_type_id": 4,
-    "series": 1,
+    "series_id": 1,
     "creator_id": 1,
     "secondary_creator_id": None,
     "source_description": None

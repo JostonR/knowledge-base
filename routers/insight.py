@@ -15,11 +15,11 @@ router = APIRouter(
 def get_insights():
     return get_all_insights()
 
-@router.get("/source/{source_id}", response_model=InsightOut)
+@router.get("/source/{source_id}", response_model=List[InsightOut])
 def source_insight(source_id: int):
     return (get_source_insights(source_id))
 
-@router.get("/series/{series_id}", response_model=InsightOut)
+@router.get("/series/{series_id}", response_model=List[InsightOut])
 def series_insight(series_id: int):
     return (get_series_insights(series_id))
 

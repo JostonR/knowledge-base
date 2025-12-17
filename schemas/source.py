@@ -5,7 +5,7 @@ from datetime import datetime
 class SourceCreate(BaseModel):
     source_name: str
     source_type_id: int
-    series: Optional[int] = None
+    series_id: Optional[int] = None
     creator_id: Optional[int] = None
     secondary_creator_id: Optional[int] = None
     source_description: Optional[str] = None
@@ -14,7 +14,7 @@ class SourceOut(BaseModel):
     id: int
     source_name: str
     source_type_id: int
-    series: Optional[int] = None
+    series_id: Optional[int] = None
     creator_id: Optional[int] = None
     secondary_creator_id: Optional[int] = None
     source_description: Optional[str] = None
