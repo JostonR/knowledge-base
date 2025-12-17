@@ -35,6 +35,9 @@ CREATE TABLE source (
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE INDEX idx_source_creator_id ON source(creator_id);
+CREATE INDEX idx_source_type_id ON source(source_type_id); 
+
 -- Helpful indexes
 CREATE INDEX idx_source_source_type_id ON source(source_type_id);
 CREATE INDEX idx_source_creator_id     ON source(creator_id);
@@ -46,13 +49,13 @@ CREATE TABLE insight (
     source_id        INT NOT NULL REFERENCES source(id) ON DELETE CASCADE,
     insight_creator_id   INT REFERENCES creator(id),
     insight_content  TEXT NOT NULL,    -- your insight text
-    quote_text       TEXT,          -- the passage from the book
-    insight_type     VARCHAR(50),      -- 'quote', 'reflection', 'summary', 'homily_seed', etc.
     created_at       TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE INDEX idx_insight_created_at ON insight(created_at);
 CREATE INDEX idx_insight_source_id ON insight(source_id);
+CREATE INDEX idx_insight_creator_id ON insight(insight_creator_id);
 
 -- 5) BIBLE BOOKS (lookup for canonical book names)
 CREATE TABLE bible_book (
@@ -103,3 +106,4 @@ CREATE TABLE quote (
         FOREIGN KEY (book_ref_id, source_id)
         REFERENCES book_reference(id, source_id)
 );
+

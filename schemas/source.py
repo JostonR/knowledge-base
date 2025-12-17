@@ -18,5 +18,5 @@ class SourceOut(BaseModel):
     creator_id: Optional[int] = None
     secondary_creator_id: Optional[int] = None
     source_description: Optional[str] = None
-    created_at: Optional[datetime] = None 
+    created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None 
