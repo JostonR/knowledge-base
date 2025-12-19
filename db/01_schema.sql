@@ -65,7 +65,7 @@ CREATE TABLE bible_book (
 );
 
 -- 6) SCRIPTURE REFERENCES (structured Bible ranges per insight)
-CREATE TABLE scripture_reference (
+CREATE TABLE bible_reference (
     id             SERIAL PRIMARY KEY,
     insight_id     INT NOT NULL REFERENCES insight(id) ON DELETE CASCADE,
     bible_book_id  INT NOT NULL REFERENCES bible_book(id),
@@ -77,7 +77,7 @@ CREATE TABLE scripture_reference (
 );
 
 CREATE INDEX idx_scripture_ref_book_chapter
-    ON scripture_reference (bible_book_id, chapter_start);
+    ON bible_reference (bible_book_id, chapter_start);
 
 -- 7) BOOK REFERENCES (page/chapter info for sources that are books)
 -- Since books live in `sources`, we just point back to source_id.

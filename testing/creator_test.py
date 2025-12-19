@@ -34,12 +34,12 @@ print("Status:", res.status_code)
 print("Raw response text:\n", res.text)
 
 
-#Testing Get All Sources
+#Testing Get all creators
 res = requests.get(url,)
 print("Status:", res.status_code)
 print("Response:", res.json())
 
-#Testing Get a specific source
+#Testing Get a specific creator
 creator_id = 1
 url = f"http://localhost:8000/api/source/{creator_id}"
 res = requests.get(url)
