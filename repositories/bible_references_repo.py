@@ -36,8 +36,31 @@ BIBLE_ORDER_BY = """ORDER BY b.canonical_order, br.chapter_start, br.verse_start
 BIBLE_REF_LIST = (BIBLE_REF_BASE + 
     "\n" + BIBLE_ORDER_BY + ";")
 
+BIBLE_REF_LIST_BY_BOOK = (BIBLE_REF_BASE + "\nWHERE br.bible_book_id = %s\n" + BIBLE_ORDER_BY + ";")
+
 BIBLE_REF_GET = (BIBLE_REF_BASE + 
     "\nWHERE br.id = %s" + "\n" + BIBLE_ORDER_BY + ";")
+
+# Search: refs that overlap a query range within a single chapter
+BIBLE_REF_SEARCH_OVERLAPS = (
+    BIBLE_REF_BASE + 
+"""
+WHERE br.bible_book_id = %s
+AND (
+    br.chapter_start = %s
+    OR br.chapter_start = %s AND br.verse_start <= %s)
+
+AND (
+    COALESCE(br.chapter_end, br.chapter_start) > %s
+    OR(
+        COALESCE(br.chapter_end, br.chapter_start) = %s
+        AND COALESCE(br.verse_end, br.verse_start) >= %s
+    )
+)
+"""
+    + "\n" + BIBLE_ORDER_BY
+    + ";"
+)
 
 
 BIBLE_REF_CREATE = """
@@ -65,6 +88,9 @@ RETURNING
 def list_bibleref():
     return fetch_all(BIBLE_REF_LIST)
 
+def list_bibleref_by_book(book_id: int):
+    return fetch_all(BIBLE_REF_LIST_BY_BOOK, (book_id, ))
+
 def get_bibleref(bibleref_int: int):
     return fetch_one(BIBLE_REF_GET, (bibleref_int, ))
 
@@ -79,4 +105,12 @@ def post_bibleref(payload):
         payload.note,
     )
     return fetch_one(BIBLE_REF_CREATE, params)
-    
+
+def search_bibleref_overlaps(book_id: int, chapter: int, verse_start: int, verse_end: int):
+    # overlaps: ref_start <= query_end AND query_start <= ref_end
+    params = (
+        book_id,
+        chapter, chapter, verse_end,   # ref_start <= (chapter, verse_end)
+        chapter, chapter, verse_start  # (chapter, verse_start) <= ref_end
+    )
+    return fetch_all(BIBLE_REF_SEARCH_OVERLAPS, params)
