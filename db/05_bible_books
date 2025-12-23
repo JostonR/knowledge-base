@@ -1,0 +1,96 @@
+BEGIN;
+
+INSERT INTO bible_book (bible_book_name, abbreviation, testament, canonical_order, last_chapter)
+VALUES
+  -- Pentateuch
+  ('Genesis',        'Gen',    'OT',  1,  50),
+  ('Exodus',         'Exod',   'OT',  2,  40),
+  ('Leviticus',      'Lev',    'OT',  3,  27),
+  ('Numbers',        'Num',    'OT',  4,  36),
+  ('Deuteronomy',    'Deut',   'OT',  5,  34),
+
+  -- Historical Books
+  ('Joshua',         'Josh',   'OT',  6,  24),
+  ('Judges',         'Judg',   'OT',  7,  21),
+  ('Ruth',           'Ruth',   'OT',  8,   4),
+  ('1 Samuel',       '1 Sam',  'OT',  9,  31),
+  ('2 Samuel',       '2 Sam',  'OT', 10,  24),
+  ('1 Kings',        '1 Kgs',  'OT', 11,  22),
+  ('2 Kings',        '2 Kgs',  'OT', 12,  25),
+  ('1 Chronicles',   '1 Chr',  'OT', 13,  29),
+  ('2 Chronicles',   '2 Chr',  'OT', 14,  36),
+  ('Ezra',           'Ezra',   'OT', 15,  10),
+  ('Nehemiah',       'Neh',    'OT', 16,  13),
+  ('Tobit',          'Tob',    'DC', 17,  14),
+  ('Judith',         'Jdt',    'DC', 18,  16),
+  ('Esther',         'Esth',   'OT', 19,  16),
+  ('1 Maccabees',    '1 Macc', 'DC', 20,  16),
+  ('2 Maccabees',    '2 Macc', 'DC', 21,  15),
+
+  -- Wisdom Literature
+  ('Job',            'Job',    'OT', 22,  42),
+  ('Psalms',         'Ps',     'OT', 23, 150),
+  ('Proverbs',       'Prov',   'OT', 24,  31),
+  ('Ecclesiastes',   'Eccl',   'OT', 25,  12),
+  ('Song of Songs',  'Song',   'OT', 26,   8),
+  ('Wisdom',         'Wis',    'DC', 27,  19),
+  ('Sirach',         'Sir',    'DC', 28,  51),
+
+  -- Major Prophets
+  ('Isaiah',         'Isa',    'OT', 29,  66),
+  ('Jeremiah',       'Jer',    'OT', 30,  52),
+  ('Lamentations',   'Lam',    'OT', 31,   5),
+  ('Baruch',         'Bar',    'DC', 32,   6),
+  ('Ezekiel',        'Ezek',   'OT', 33,  48),
+  ('Daniel',         'Dan',    'OT', 34,  14),
+
+  -- Minor Prophets
+  ('Hosea',          'Hos',    'OT', 35,  14),
+  ('Joel',           'Joel',   'OT', 36,   4),
+  ('Amos',           'Amos',   'OT', 37,   9),
+  ('Obadiah',        'Obad',   'OT', 38,   1),
+  ('Jonah',          'Jonah',  'OT', 39,   4),
+  ('Micah',          'Mic',    'OT', 40,   7),
+  ('Nahum',          'Nah',    'OT', 41,   3),
+  ('Habakkuk',       'Hab',    'OT', 42,   3),
+  ('Zephaniah',      'Zeph',   'OT', 43,   3),
+  ('Haggai',         'Hag',    'OT', 44,   2),
+  ('Zechariah',      'Zech',   'OT', 45,  14),
+  ('Malachi',        'Mal',    'OT', 46,   3),
+
+  -- New Testament
+  ('Matthew',        'Matt',   'NT', 47,  28),
+  ('Mark',           'Mark',   'NT', 48,  16),
+  ('Luke',           'Luke',   'NT', 49,  24),
+  ('John',           'John',   'NT', 50,  21),
+  ('Acts',           'Acts',   'NT', 51,  28),
+  ('Romans',         'Rom',    'NT', 52,  16),
+  ('1 Corinthians',  '1 Cor',  'NT', 53,  16),
+  ('2 Corinthians',  '2 Cor',  'NT', 54,  13),
+  ('Galatians',      'Gal',    'NT', 55,   6),
+  ('Ephesians',      'Eph',    'NT', 56,   6),
+  ('Philippians',    'Phil',   'NT', 57,   4),
+  ('Colossians',     'Col',    'NT', 58,   4),
+  ('1 Thessalonians','1 Thess','NT', 59,   5),
+  ('2 Thessalonians','2 Thess','NT', 60,   3),
+  ('1 Timothy',      '1 Tim',  'NT', 61,   6),
+  ('2 Timothy',      '2 Tim',  'NT', 62,   4),
+  ('Titus',          'Titus',  'NT', 63,   3),
+  ('Philemon',       'Phlm',   'NT', 64,   1),
+  ('Hebrews',        'Heb',    'NT', 65,  13),
+  ('James',          'Jas',    'NT', 66,   5),
+  ('1 Peter',        '1 Pet',  'NT', 67,   5),
+  ('2 Peter',        '2 Pet',  'NT', 68,   3),
+  ('1 John',         '1 John', 'NT', 69,   5),
+  ('2 John',         '2 John', 'NT', 70,   1),
+  ('3 John',         '3 John', 'NT', 71,   1),
+  ('Jude',           'Jude',   'NT', 72,   1),
+  ('Revelation',     'Rev',    'NT', 73,  22)
+
+ON CONFLICT (bible_book_name) DO UPDATE SET
+  abbreviation    = EXCLUDED.abbreviation,
+  testament       = EXCLUDED.testament,
+  canonical_order = EXCLUDED.canonical_order,
+  last_chapter    = EXCLUDED.last_chapter;
+
+COMMIT;
