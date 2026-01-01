@@ -55,7 +55,7 @@ CREATE INDEX idx_insight_source_id ON insight(source_id);
 CREATE INDEX idx_insight_creator_id ON insight(insight_creator_id);
 
 -- 5) BIBLE BOOKS (lookup for canonical book names)
-CREATE TABLE bible_book (
+ 
     id              SERIAL PRIMARY KEY,
     bible_book_name            VARCHAR(50) NOT NULL UNIQUE,  -- 'Genesis', 'Exodus', 'Matthew', 'Romans'
     abbreviation    VARCHAR(16),                 -- 'Gen', 'Ex', 'Mt', 'Rom'
@@ -103,4 +103,16 @@ CREATE TABLE quote (
         FOREIGN KEY (book_ref_id, source_id)
         REFERENCES book_reference(id, source_id)
 );
+
+-- 8) INSIGHT <-> QUOTE LINKS (one quote can inspire many insights and vice versa)
+CREATE TABLE insight_quote (
+    id              SERIAL PRIMARY KEY,
+    insight_id      INT NOT NULL REFERENCES insight(id) ON DELETE CASCADE,
+    quote_id        INT NOT NULL REFERENCES quote(id) ON DELETE CASCADE,
+    note            TEXT,
+    UNIQUE(insight_id, quote_id)
+);
+
+CREATE INDEX idx_insight_quote_insight_id ON insight_quote(insight_id);
+CREATE INDEX idx_insight_quote_quote_id ON insight_quote(quote_id);
 

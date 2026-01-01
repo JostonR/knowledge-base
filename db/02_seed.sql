@@ -54,3 +54,10 @@ VALUES (2, 1, 12, 1, NULL, 5, NULL);
 INSERT INTO bible_reference (insight_id, bible_book_id, chapter_start, verse_start, chapter_end, verse_end, note)
 VALUES (3, 1, 12, 10, Null, Null, 'theme: faithfullness to God''s exact words');
 
+-- Book Ref
+INSERT INTO book_reference (source_id, page_start, page_end, chapter_start, chapter_end)
+VALUES (1, 15, 16, 1, 1);
+-- Quotes Tabls
+INSERT INTO quote (quote_text, source_id, book_ref_id)
+VALUES ('Abram leaves his country', 1, 1);
+
