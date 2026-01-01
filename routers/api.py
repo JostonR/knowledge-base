@@ -5,6 +5,7 @@ from routers.creator import router as creator_router
 from routers.bible_references import router as bibleref_router
 from routers.debug import router as debug
 from routers.quote import router as quote
+from routers.insight_quote import router as insight_quote
 
 api_router = APIRouter(prefix="/api")
 
@@ -14,3 +15,4 @@ api_router.include_router(creator_router)
 api_router.include_router(bibleref_router)
 api_router.include_router(debug)
 api_router.include_router(quote)
+api_router.include_router(insight_quote)

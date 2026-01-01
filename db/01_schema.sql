@@ -55,7 +55,7 @@ CREATE INDEX idx_insight_source_id ON insight(source_id);
 CREATE INDEX idx_insight_creator_id ON insight(insight_creator_id);
 
 -- 5) BIBLE BOOKS (lookup for canonical book names)
- 
+ CREATE TABLE bible_book(
     id              SERIAL PRIMARY KEY,
     bible_book_name            VARCHAR(50) NOT NULL UNIQUE,  -- 'Genesis', 'Exodus', 'Matthew', 'Romans'
     abbreviation    VARCHAR(16),                 -- 'Gen', 'Ex', 'Mt', 'Rom'
